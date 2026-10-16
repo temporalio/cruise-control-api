@@ -500,11 +500,11 @@ message RespondStepChallengeRequest {
   string target_group_id = 2;
   // Required for Deployment Runs and omitted for Promotion Runs: Owning Deployment Target full stable ID.
   string target_id = 3;
-  // Required: Parent Promotion or Deployment Run full stable ID. Example: `acct.acme:pipeline.checkout:pr.route.run`.
+  // Required: Parent Promotion or Deployment Run full stable ID. Example: `acct.acme:pipeline.checkout:tg.prod:pr.00000000000000000000000000.00000000000000000000000000`.
   string parent_run_id = 4;
-  // Required: Step Run full stable ID beneath parent_run_id. Example: `acct.acme:pipeline.checkout:promotion.00000001:step.00000001`.
+  // Required: Step Run full stable ID beneath parent_run_id. Example: `acct.acme:pipeline.checkout:tg.prod:pr.00000000000000000000000000.00000000000000000000000001:step.00000001`.
   string step_run_id = 5;
-  // Required: Approval Challenge full stable ID beneath parent_run_id. Example: `acct.acme:pipeline.checkout:promotion.00000001:approval.00000001`.
+  // Required: Approval Challenge full stable ID beneath parent_run_id. Example: `acct.acme:pipeline.checkout:tg.prod:pr.00000000000000000000000000.00000000000000000000000001:approval.00000001`.
   string challenge_id = 6;
   // Required: Current Approval Challenge etag; non-empty.
   string prior_etag = 7;
@@ -524,7 +524,7 @@ message RespondStepChallengeResponse {
 }
 
 message RetryPromotionRequest {
-  // Required: Promotion Run full stable ID. Example: `acct.acme:pipeline.checkout:promotion.00000001`.
+  // Required: Promotion Run full stable ID. Example: `acct.acme:pipeline.checkout:tg.prod:pr.00000000000000000000000000.00000000000000000000000001`.
   string promotion_run_id = 1;
   // Required: Current Promotion Run etag; non-empty.
   string prior_etag = 2;
@@ -537,16 +537,16 @@ message RetryPromotionAsyncResponse {
 }
 
 message RetryPromotionResponse {
-  // Required: Original Promotion Run full stable ID. Example: `acct.acme:pipeline.checkout:promotion.00000001`.
+  // Required: Original Promotion Run full stable ID. Example: `acct.acme:pipeline.checkout:tg.prod:pr.00000000000000000000000000.00000000000000000000000001`.
   string promotion_run_id = 1;
-  // Optional: Newly created Promotion Run full stable ID; omitted for stale or superseded outcomes. Example: `acct.acme:pipeline.checkout:promotion.00000002`.
+  // Optional: Newly created Promotion Run full stable ID; omitted for stale or superseded outcomes. Example: `acct.acme:pipeline.checkout:tg.prod:pr.00000000000000000000000000.00000000000000000000000002`.
   string created_promotion_run_id = 2;
   // Required: Retry outcome; UNSPECIFIED is invalid.
   temporal.api.cruisecontrol.pipeline.v1.PromotionRetryOutcome retry_outcome = 3;
 }
 
 message CancelPromotionRequest {
-  // Required: Promotion Run full stable ID. Example: `acct.acme:pipeline.checkout:promotion.00000001`.
+  // Required: Promotion Run full stable ID. Example: `acct.acme:pipeline.checkout:tg.prod:pr.00000000000000000000000000.00000000000000000000000001`.
   string promotion_run_id = 1;
   // Required: Current Promotion Run etag; non-empty.
   string prior_etag = 2;
