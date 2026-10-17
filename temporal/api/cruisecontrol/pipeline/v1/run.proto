@@ -102,11 +102,11 @@ message PromotionRun {
   string target_group_id = 3;
   // Required: Promoted Artifact full stable ID. Example: `acct.acme:pipeline.checkout:art.0123456789abcdef`.
   string artifact_id = 4;
-  // Required: Cruise Control-generated Promotion Run full stable ID. Example: `acct.acme:pipeline.checkout:promotion.00000001`.
+  // Required: Cruise Control-generated Promotion Run full stable ID. Example: `acct.acme:pipeline.checkout:tg.prod:pr.00000000000000000000000000.00000000000000000000000001`.
   string promotion_run_id = 5;
   // Required: Predecessor Target Group full stable ID or the literal SOURCE. Example: `SOURCE`.
   string source_target_group_id = 6;
-  // Optional: Prior Promotion Run full stable ID for a retry. Example: `acct.acme:pipeline.checkout:promotion.00000001`.
+  // Optional: Prior Promotion Run full stable ID for a retry. Example: `acct.acme:pipeline.checkout:tg.prod:pr.00000000000000000000000000.00000000000000000000000001`.
   string retry_of_promotion_run_id = 7;
   // Required: Promotion status; UNSPECIFIED is invalid.
   PromotionRunStatus status = 8;
@@ -168,11 +168,11 @@ message StepRun {
   string target_group_id = 3;
   // Required for Deployment Runs and omitted for Promotion Runs: Owning Deployment Target full stable ID.
   string target_id = 4;
-  // Required: Parent Promotion or Deployment Run full stable ID. Example: `acct.acme:pipeline.checkout:promotion.00000001`.
+  // Required: Parent Promotion or Deployment Run full stable ID. Example: `acct.acme:pipeline.checkout:tg.prod:pr.00000000000000000000000000.00000000000000000000000001`.
   string parent_run_id = 5;
   // Required: Definition step ID. Example: `approve-prod`.
   string step_id = 6;
-  // Required: Cruise Control-generated Step Run full stable ID. Example: `acct.acme:pipeline.checkout:promotion.00000001:step.00000001`.
+  // Required: Cruise Control-generated Step Run full stable ID. Example: `acct.acme:pipeline.checkout:tg.prod:pr.00000000000000000000000000.00000000000000000000000001:step.00000001`.
   string step_run_id = 7;
   // Required: Step type; UNSPECIFIED is invalid.
   temporal.api.cruisecontrol.workflow.v1.StepType step_type = 8;
