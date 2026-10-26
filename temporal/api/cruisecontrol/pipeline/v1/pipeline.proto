@@ -6,7 +6,6 @@ import "temporal/api/cruisecontrol/pipeline/v1/deployment.proto";
 import "temporal/api/cruisecontrol/policyservice/v1/policy.proto";
 import "temporal/api/cruisecontrol/principal/v1/principal.proto";
 import "temporal/api/cruisecontrol/workflow/v1/workflow_definition.proto";
-import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "go.temporal.io/api/cruise-control/pipeline/v1;pipelinev1";
@@ -96,10 +95,8 @@ message DeploymentTargetSpec {
   map<string, string> labels = 2;
   // Required: Temporal worker configuration.
   TemporalConfiguration temporal_configuration = 3;
-  // Required: Registered compute-platform identifier; non-empty. Example: `kubernetes`.
-  string compute_platform = 4;
-  // Optional: Provider configuration; size, depth, strings, lists, and entries are service-capped.
-  google.protobuf.Struct compute_platform_details = 5;
+  // Required: Account-scoped Compute Pool ID. Example: `acct.acme:cpool.production`.
+  string compute_pool_id = 4;
   // Optional: Target environment keyed by variable name; keys are 1-128 characters matching [A-Za-z_][A-Za-z0-9_]* and each value has exactly one source.
   map<string, temporal.api.cruisecontrol.workflow.v1.EnvironmentVariable> environment_variables = 6;
   // Required: Deployment workflow definition.

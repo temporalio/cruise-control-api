@@ -1,0 +1,64 @@
+syntax = "proto3";
+package temporal.api.cruisecontrol.computepoolservice.v1;
+
+import "google/api/annotations.proto";
+import "temporal/api/cruisecontrol/computepoolservice/v1/request_response.proto";
+
+option go_package = "go.temporal.io/api/cruise-control/computepoolservice/v1;computepoolservicev1";
+
+// ComputePoolService manages account-scoped Compute Pools and their immutable revisions.
+// Mutations return asynchronous operation handles; reads are synchronous.
+service ComputePoolService {
+  // CreateComputePool creates a pool and publishes revision 1; no Account etag is required.
+  // buf:lint:ignore RPC_RESPONSE_STANDARD_NAME
+  rpc CreateComputePool(CreateComputePoolRequest) returns (CreateComputePoolAsyncResponse) {
+    option (google.api.http) = {
+      post: "/v1/compute-pools"
+      body: "*"
+    };
+  }
+
+  // UpdateComputePool publishes a new revision from the latest active pool head using prior_etag.
+  // Matching unchanged content creates no revision; stale etags conflict.
+  // buf:lint:ignore RPC_RESPONSE_STANDARD_NAME
+  rpc UpdateComputePool(UpdateComputePoolRequest) returns (UpdateComputePoolAsyncResponse) {
+    option (google.api.http) = {
+      patch: "/v1/compute-pools/{compute_pool_id}"
+      body: "*"
+    };
+  }
+
+  // GetComputePool returns the current head and the requested revision, defaulting to latest.
+  rpc GetComputePool(GetComputePoolRequest) returns (GetComputePoolResponse) {
+    option (google.api.http) = {get: "/v1/compute-pools/{compute_pool_id}"};
+  }
+
+  // ListComputePools lists pools in the caller account; archived pools are excluded by default.
+  rpc ListComputePools(ListComputePoolsRequest) returns (ListComputePoolsResponse) {
+    option (google.api.http) = {get: "/v1/compute-pools"};
+  }
+
+  // ListComputePoolRevisions lists retained revisions newest first, including for archived pools.
+  rpc ListComputePoolRevisions(ListComputePoolRevisionsRequest) returns (ListComputePoolRevisionsResponse) {
+    option (google.api.http) = {get: "/v1/compute-pools/{compute_pool_id}/revisions"};
+  }
+
+  // ArchiveComputePool blocks new target references, deployments, and configuration updates.
+  // Existing pinned runs and deployed-version cleanup continue using their selected revisions.
+  // buf:lint:ignore RPC_RESPONSE_STANDARD_NAME
+  rpc ArchiveComputePool(ArchiveComputePoolRequest) returns (ArchiveComputePoolAsyncResponse) {
+    option (google.api.http) = {
+      post: "/v1/compute-pools/{compute_pool_id}:archive"
+      body: "*"
+    };
+  }
+
+  // RestoreComputePool re-enables updates and deployments using the latest configuration revision.
+  // buf:lint:ignore RPC_RESPONSE_STANDARD_NAME
+  rpc RestoreComputePool(RestoreComputePoolRequest) returns (RestoreComputePoolAsyncResponse) {
+    option (google.api.http) = {
+      post: "/v1/compute-pools/{compute_pool_id}:restore"
+      body: "*"
+    };
+  }
+}

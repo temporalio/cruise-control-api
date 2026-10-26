@@ -1,6 +1,7 @@
 syntax = "proto3";
 package temporal.api.cruisecontrol.pipeline.v1;
 
+import "temporal/api/cruisecontrol/computepool/v1/compute_pool.proto";
 import "temporal/api/cruisecontrol/principal/v1/principal.proto";
 import "temporal/api/cruisecontrol/workflow/v1/workflow_definition.proto";
 import "google/protobuf/struct.proto";
@@ -156,6 +157,8 @@ message DeploymentRun {
   string etag = 14;
   // Optional: Deployed version created or verified by this run.
   string deployed_version_id = 15;
+  // Pool revision pinned when the deployment was accepted.
+  temporal.api.cruisecontrol.computepool.v1.ComputePoolRevisionReference compute_pool_revision = 16;
 }
 
 // StepRun records one execution attempt for a step in a promotion or deployment run.

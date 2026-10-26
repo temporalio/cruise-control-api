@@ -8,6 +8,8 @@ option go_package = "go.temporal.io/api/cruise-control/extensions/computeplatfor
 // ComputePlatformProviderService supplies the provider-facing primitives used by
 // built-in deployment steps. Operations must be idempotent under retries.
 service ComputePlatformProviderService {
+  // Validates provider configuration before publishing a compute pool revision.
+  rpc ValidateConfig(ValidateConfigRequest) returns (ValidateConfigResponse);
   // Creates or verifies one deployed version.
   rpc CreateDeployedVersion(CreateDeployedVersionRequest) returns (CreateDeployedVersionResponse);
   // Describes provider health for one deployed version.

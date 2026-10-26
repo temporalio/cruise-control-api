@@ -1,6 +1,7 @@
 syntax = "proto3";
 package temporal.api.cruisecontrol.extensions.computeplatformproviderservice.v1;
 
+import "temporal/api/cruisecontrol/artifact/v1/artifact.proto";
 import "temporal/api/cruisecontrol/extensions/computeplatformproviderservice/v1/types.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
@@ -20,16 +21,12 @@ message CreateDeployedVersionRequest {
   string target_id = 4;
   // Required: Cruise Control-generated idempotency identity.
   string deployed_version_id = 5;
-  // Required: Artifact full stable ID.
-  string artifact_id = 6;
-  // Required: Artifact version.
-  string artifact_version = 7;
+  // Required: Full accepted artifact, including worker image references and Build ID.
+  temporal.api.cruisecontrol.artifact.v1.Artifact artifact = 6;
   // Required: Temporal namespace used by the target.
   string temporal_namespace = 8;
   // Required: Temporal Worker Deployment name.
   string worker_deployment_name = 9;
-  // Required: Temporal Worker Deployment Build ID.
-  string worker_build_id = 10;
   // Optional: target compute-platform configuration.
   google.protobuf.Struct platform_details = 11;
   // Optional: step-specific provider parameters.
@@ -138,3 +135,8 @@ message RunTaskResponse {
   // Optional: bounded provider diagnostics.
   google.protobuf.Struct details = 6;
 }
+
+message ValidateConfigRequest {
+  google.protobuf.Struct platform_details = 1;
+}
+message ValidateConfigResponse {}
