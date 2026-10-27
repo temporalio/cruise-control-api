@@ -7,8 +7,10 @@ import "temporal/api/cruisecontrol/workflow/v1/workflow_template.proto";
 option go_package = "go.temporal.io/api/cruise-control/workflowtemplateservice/v1;workflowtemplateservicev1";
 
 message CreateWorkflowTemplateRequest {
-  // Required: Workflow Template identity and customer-managed spec; account_id and etag must be omitted.
-  temporal.api.cruisecontrol.workflow.v1.WorkflowTemplate workflow_template = 1;
+  // Required: Workflow Template full stable ID; a direct child of the caller account with a wt. segment. Example: `acct.acme:wt.standard`.
+  string template_id = 1;
+  // Required: Initial customer-managed specification.
+  temporal.api.cruisecontrol.workflow.v1.WorkflowTemplateSpec spec = 2;
 }
 
 message CreateWorkflowTemplateAsyncResponse {

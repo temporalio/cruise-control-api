@@ -13,8 +13,10 @@ import "google/protobuf/timestamp.proto";
 option go_package = "go.temporal.io/api/cruise-control/pipelineservice/v1;pipelineservicev1";
 
 message CreatePipelineRequest {
-  // Required: Pipeline identity and customer-managed spec.
-  temporal.api.cruisecontrol.pipeline.v1.Pipeline pipeline = 1;
+  // Required: Pipeline full stable ID; a direct child of the caller account with a pipeline. segment. Example: `acct.acme:pipeline.checkout`.
+  string pipeline_id = 1;
+  // Required: Initial customer-managed specification.
+  temporal.api.cruisecontrol.pipeline.v1.PipelineSpec spec = 2;
 }
 
 message CreatePipelineAsyncResponse {
