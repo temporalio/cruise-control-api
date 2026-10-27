@@ -9,22 +9,20 @@ option go_package = "go.temporal.io/api/cruise-control/extensions/stepservice/v1
 // ExecutePromotionStepRequest contains the Promotion Run and custom-step
 // context supplied to a provider-facing StepService operation.
 message ExecutePromotionStepRequest {
-  // Required: Owning Account full stable ID. Example: `acct.acme`.
-  string account_id = 1;
   // Required: Owning Pipeline full stable ID. Example: `acct.acme:pipeline.checkout`.
-  string pipeline_id = 2;
+  string pipeline_id = 1;
   // Required: Parent Promotion Run full stable ID.
-  string parent_run_id = 3;
+  string parent_run_id = 2;
   // Required: Artifact full stable ID being promoted.
-  string artifact_id = 4;
+  string artifact_id = 3;
   // Optional: Deployment Target full stable ID; currently omitted for promotion steps.
-  string target_id = 5;
+  string target_id = 4;
   // Required: Provider-defined custom step type understood by the selected StepService.
-  string step_type = 6;
+  string step_type = 5;
   // Optional: Provider-defined custom step parameters from the resolved workflow definition.
-  google.protobuf.Struct parameters = 7;
+  google.protobuf.Struct parameters = 6;
   // Required: Execution direction; UNSPECIFIED is invalid.
-  StepExecutionDirection direction = 8;
+  StepExecutionDirection direction = 7;
 }
 
 // ExecutePromotionStepResponse reports the terminal result of a promotion
@@ -52,24 +50,22 @@ message ExecutePromotionStepResponse {
 // ExecuteDeploymentStepRequest contains the Deployment Run and custom-step
 // context supplied to a provider-facing StepService operation.
 message ExecuteDeploymentStepRequest {
-  // Required: Owning Account full stable ID. Example: `acct.acme`.
-  string account_id = 1;
   // Required: Owning Pipeline full stable ID. Example: `acct.acme:pipeline.checkout`.
-  string pipeline_id = 2;
+  string pipeline_id = 1;
   // Required: Owning Target Group full stable ID.
-  string target_group_id = 3;
+  string target_group_id = 2;
   // Required: Deployment Target full stable ID.
-  string target_id = 4;
+  string target_id = 3;
   // Required: Parent Deployment Run full stable ID.
-  string parent_run_id = 5;
+  string parent_run_id = 4;
   // Required: Artifact full stable ID being deployed.
-  string artifact_id = 6;
+  string artifact_id = 5;
   // Required: Provider-defined custom step type understood by the selected StepService.
-  string step_type = 7;
+  string step_type = 6;
   // Optional: Provider-defined custom step parameters from the resolved workflow definition.
-  google.protobuf.Struct parameters = 8;
+  google.protobuf.Struct parameters = 7;
   // Required: Execution direction; UNSPECIFIED is invalid.
-  StepExecutionDirection direction = 9;
+  StepExecutionDirection direction = 8;
 }
 
 // ExecuteDeploymentStepResponse reports the terminal result of a deployment

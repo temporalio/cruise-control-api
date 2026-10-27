@@ -52,7 +52,7 @@ message DeleteWorkflowTemplateAsyncResponse {
 message DeleteWorkflowTemplateResponse {}
 
 message GetWorkflowTemplateRequest {
-  // Required: Workflow Template full stable ID; scoped beneath account_id. Example: `acct.acme:wt.standard`.
+  // Required: Workflow Template full stable ID; scoped beneath the owning account. Example: `acct.acme:wt.standard`.
   string template_id = 1;
 }
 

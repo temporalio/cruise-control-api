@@ -59,29 +59,27 @@ message ArtifactSpec {
 
 // Artifact is an immutable version published for rollout through a Pipeline.
 message Artifact {
-  // Required: Owning Account full stable ID. Example: `acct.acme`.
-  string account_id = 1;
   // Required: Owning Pipeline full stable ID. Example: `acct.acme:pipeline.checkout`.
-  string pipeline_id = 2;
+  string pipeline_id = 1;
   // Required: Cruise Control-generated Artifact full stable ID. Example: `acct.acme:pipeline.checkout:art.0123456789abcdef`.
-  string artifact_id = 3;
+  string artifact_id = 2;
   // Required: Customer-provided immutable spec.
-  ArtifactSpec spec = 4;
+  ArtifactSpec spec = 3;
   // Optional: Canonical SemVer without build metadata; present only for SEMVER artifacts.
-  string normalized_version = 5;
+  string normalized_version = 4;
   // Required: Ordering policy captured at publish time.
-  OrderingPolicy ordering_policy = 6;
+  OrderingPolicy ordering_policy = 5;
   // Required: Time when the Artifact was published.
-  google.protobuf.Timestamp published_on = 7;
+  google.protobuf.Timestamp published_on = 6;
   // Required: Per-Pipeline publish sequence in the range 1-18446744073709551615.
-  uint64 published_sequence = 8;
+  uint64 published_sequence = 7;
 
   // Required: Principal identity.
-  temporal.api.cruisecontrol.principal.v1.Principal published_by = 9;
+  temporal.api.cruisecontrol.principal.v1.Principal published_by = 8;
   // Required: Human-readable ordering value.
-  string ordering_key = 10;
+  string ordering_key = 9;
   // Required: Canonical bytewise ordering value.
-  bytes ordering_key_sort = 11;
+  bytes ordering_key_sort = 10;
   // Required: Opaque content-derived etag; non-empty.
-  string etag = 12;
+  string etag = 11;
 }

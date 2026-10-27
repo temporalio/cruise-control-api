@@ -26,18 +26,16 @@ message PipelineSpec {
 
 // Pipeline is an account-scoped delivery resource and Artifact collection.
 message Pipeline {
-  // Required: Owning Account full stable ID. Example: `acct.acme`.
-  string account_id = 1;
-  // Required: Pipeline full stable ID; scoped beneath account_id. Example: `acct.acme:pipeline.checkout`.
-  string pipeline_id = 2;
+  // Required: Pipeline full stable ID; scoped beneath the owning account. Example: `acct.acme:pipeline.checkout`.
+  string pipeline_id = 1;
   // Required: Customer-managed spec.
-  PipelineSpec spec = 3;
+  PipelineSpec spec = 2;
   // Required: Time when the Pipeline was created.
-  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp created_at = 3;
   // Required: Time when the Pipeline spec was last updated.
-  google.protobuf.Timestamp updated_at = 5;
+  google.protobuf.Timestamp updated_at = 4;
   // Required: Opaque etag used for write preconditions; non-empty.
-  string etag = 6;
+  string etag = 5;
 }
 
 enum NextGroupSignalPolicy {
@@ -63,20 +61,18 @@ message TargetGroupSpec {
 
 // TargetGroup is an ordered promotion stage containing Deployment Targets.
 message TargetGroup {
-  // Required: Owning Account full stable ID. Example: `acct.acme`.
-  string account_id = 1;
   // Required: Owning Pipeline full stable ID. Example: `acct.acme:pipeline.checkout`.
-  string pipeline_id = 2;
+  string pipeline_id = 1;
   // Required: Target Group full stable ID; scoped beneath pipeline_id. Example: `acct.acme:pipeline.checkout:tg.prod`.
-  string target_group_id = 3;
+  string target_group_id = 2;
   // Required: Customer-managed spec.
-  TargetGroupSpec spec = 4;
+  TargetGroupSpec spec = 3;
   // Required: Derived member Target IDs in bytewise lexical order. Example: `acct.acme:pipeline.checkout:tg.prod:dt.us-west-1`.
-  repeated string target_ids = 5;
+  repeated string target_ids = 4;
   // Required: Opaque etag used for write preconditions; non-empty.
-  string etag = 6;
+  string etag = 5;
   // Optional: Active lock; omitted when unlocked.
-  Lock lock = 7;
+  Lock lock = 6;
 }
 
 // TemporalConfiguration identifies the Temporal worker managed by a Deployment Target.
@@ -105,22 +101,20 @@ message DeploymentTargetSpec {
 
 // DeploymentTarget identifies a managed deployment destination in a Target Group.
 message DeploymentTarget {
-  // Required: Owning Account full stable ID. Example: `acct.acme`.
-  string account_id = 1;
   // Required: Owning Pipeline full stable ID. Example: `acct.acme:pipeline.checkout`.
-  string pipeline_id = 2;
+  string pipeline_id = 1;
   // Required: Immutable owning Target Group full stable ID. Example: `acct.acme:pipeline.checkout:tg.prod`.
-  string target_group_id = 3;
+  string target_group_id = 2;
   // Required: Deployment Target full stable ID; scoped beneath target_group_id. Example: `acct.acme:pipeline.checkout:tg.prod:dt.us-west-1`.
-  string target_id = 4;
+  string target_id = 3;
   // Required: Customer-managed spec.
-  DeploymentTargetSpec spec = 5;
+  DeploymentTargetSpec spec = 4;
   // Required: Opaque etag used for write preconditions; non-empty.
-  string etag = 6;
+  string etag = 5;
   // Optional: Active lock; omitted when unlocked.
-  Lock lock = 7;
+  Lock lock = 6;
   // Deployed versions currently associated with this target.
-  repeated temporal.api.cruisecontrol.pipeline.v1.DeployedVersion deployed_versions = 8;
+  repeated temporal.api.cruisecontrol.pipeline.v1.DeployedVersion deployed_versions = 7;
 }
 
 // Lock records an operator lock on a Target Group or Deployment Target.

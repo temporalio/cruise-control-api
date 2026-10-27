@@ -95,145 +95,137 @@ enum PromotionRetryOutcome {
 
 // PromotionRun records one attempt to admit an Artifact into a Target Group.
 message PromotionRun {
-  // Required: Owning Account full stable ID. Example: `acct.acme`.
-  string account_id = 1;
   // Required: Owning Pipeline full stable ID. Example: `acct.acme:pipeline.checkout`.
-  string pipeline_id = 2;
+  string pipeline_id = 1;
   // Required: Owning Target Group full stable ID. Example: `acct.acme:pipeline.checkout:tg.prod`.
-  string target_group_id = 3;
+  string target_group_id = 2;
   // Required: Promoted Artifact full stable ID. Example: `acct.acme:pipeline.checkout:art.0123456789abcdef`.
-  string artifact_id = 4;
+  string artifact_id = 3;
   // Required: Cruise Control-generated Promotion Run full stable ID. Example: `acct.acme:pipeline.checkout:tg.prod:pr.00000000000000000000000000.00000000000000000000000001`.
-  string promotion_run_id = 5;
+  string promotion_run_id = 4;
   // Required: Predecessor Target Group full stable ID or the literal SOURCE. Example: `SOURCE`.
-  string source_target_group_id = 6;
+  string source_target_group_id = 5;
   // Optional: Prior Promotion Run full stable ID for a retry. Example: `acct.acme:pipeline.checkout:tg.prod:pr.00000000000000000000000000.00000000000000000000000001`.
-  string retry_of_promotion_run_id = 7;
+  string retry_of_promotion_run_id = 6;
   // Required: Promotion status; UNSPECIFIED is invalid.
-  PromotionRunStatus status = 8;
+  PromotionRunStatus status = 7;
   // Required: Promotion status reason; UNSPECIFIED is invalid.
-  PromotionRunStatusReason status_reason = 9;
+  PromotionRunStatusReason status_reason = 8;
   // Optional: Bounded diagnostic summary.
-  string summary = 10;
+  string summary = 9;
   // Optional: Bounded structured diagnostics.
-  google.protobuf.Struct details = 11;
+  google.protobuf.Struct details = 10;
   // Required: Time when the run started.
-  google.protobuf.Timestamp started_at = 12;
+  google.protobuf.Timestamp started_at = 11;
   // Optional: Time when the run finished; omitted while non-terminal.
-  google.protobuf.Timestamp finished_at = 13;
+  google.protobuf.Timestamp finished_at = 12;
   // Required: Opaque etag used for write preconditions; non-empty.
-  string etag = 14;
+  string etag = 13;
 }
 
 // DeploymentRun records one attempt to deploy an Artifact to a Deployment Target.
 message DeploymentRun {
-  // Required: Owning Account full stable ID. Example: `acct.acme`.
-  string account_id = 1;
   // Required: Owning Pipeline full stable ID. Example: `acct.acme:pipeline.checkout`.
-  string pipeline_id = 2;
+  string pipeline_id = 1;
   // Required: Owning Target Group full stable ID. Example: `acct.acme:pipeline.checkout:tg.prod`.
-  string target_group_id = 3;
+  string target_group_id = 2;
   // Required: Owning Deployment Target full stable ID. Example: `acct.acme:pipeline.checkout:tg.prod:dt.us-west-1`.
-  string target_id = 4;
+  string target_id = 3;
   // Required: Deployed Artifact full stable ID. Example: `acct.acme:pipeline.checkout:art.0123456789abcdef`.
-  string artifact_id = 5;
+  string artifact_id = 4;
   // Required: Cruise Control-generated Deployment Run full stable ID. Example: `acct.acme:pipeline.checkout:tg.prod:dt.us-west-1:deployment.00000001`.
-  string deployment_run_id = 6;
+  string deployment_run_id = 5;
   // Optional: Prior Deployment Run full stable ID for a retry. Example: `acct.acme:pipeline.checkout:tg.prod:dt.us-west-1:deployment.00000001`.
-  string retry_of_deployment_run_id = 7;
+  string retry_of_deployment_run_id = 6;
   // Required: Deployment status; UNSPECIFIED is invalid.
-  DeploymentRunStatus status = 8;
+  DeploymentRunStatus status = 7;
   // Optional: Workflow failure, cancellation, timeout, or skip reason; UNSPECIFIED when omitted.
-  DeploymentRunStatusReason status_reason = 9;
+  DeploymentRunStatusReason status_reason = 8;
   // Optional: Bounded diagnostic summary.
-  string summary = 10;
+  string summary = 9;
   // Optional: Bounded structured diagnostics.
-  google.protobuf.Struct details = 11;
+  google.protobuf.Struct details = 10;
   // Required: Time when the run started.
-  google.protobuf.Timestamp started_at = 12;
+  google.protobuf.Timestamp started_at = 11;
   // Optional: Time when the run finished; omitted while non-terminal.
-  google.protobuf.Timestamp finished_at = 13;
+  google.protobuf.Timestamp finished_at = 12;
   // Required: Opaque etag used for write preconditions; non-empty.
-  string etag = 14;
+  string etag = 13;
   // Optional: Deployed version created or verified by this run.
-  string deployed_version_id = 15;
+  string deployed_version_id = 14;
   // Pool revision pinned when the deployment was accepted.
-  temporal.api.cruisecontrol.computepool.v1.ComputePoolRevisionReference compute_pool_revision = 16;
+  temporal.api.cruisecontrol.computepool.v1.ComputePoolRevisionReference compute_pool_revision = 15;
 }
 
 // StepRun records one execution attempt for a step in a promotion or deployment run.
 message StepRun {
-  // Required: Owning Account full stable ID. Example: `acct.acme`.
-  string account_id = 1;
   // Required: Owning Pipeline full stable ID. Example: `acct.acme:pipeline.checkout`.
-  string pipeline_id = 2;
+  string pipeline_id = 1;
   // Required: Owning Target Group full stable ID.
-  string target_group_id = 3;
+  string target_group_id = 2;
   // Required for Deployment Runs and omitted for Promotion Runs: Owning Deployment Target full stable ID.
-  string target_id = 4;
+  string target_id = 3;
   // Required: Parent Promotion or Deployment Run full stable ID. Example: `acct.acme:pipeline.checkout:tg.prod:pr.00000000000000000000000000.00000000000000000000000001`.
-  string parent_run_id = 5;
+  string parent_run_id = 4;
   // Required: Definition step ID. Example: `approve-prod`.
-  string step_id = 6;
+  string step_id = 5;
   // Required: Cruise Control-generated Step Run full stable ID. Example: `acct.acme:pipeline.checkout:tg.prod:pr.00000000000000000000000000.00000000000000000000000001:step.00000001`.
-  string step_run_id = 7;
+  string step_run_id = 6;
   // Required: Step type; UNSPECIFIED is invalid.
-  temporal.api.cruisecontrol.workflow.v1.StepType step_type = 8;
+  temporal.api.cruisecontrol.workflow.v1.StepType step_type = 7;
   // Required: Step status; UNSPECIFIED is invalid.
-  StepRunStatus status = 9;
+  StepRunStatus status = 8;
   // Required: Step status reason; UNSPECIFIED is invalid.
-  StepRunStatusReason status_reason = 10;
+  StepRunStatusReason status_reason = 9;
   // Required: Attempt number in the range 1-2147483647.
-  int32 attempt = 11;
+  int32 attempt = 10;
   // Required: Opaque etag used for write preconditions; non-empty.
-  string etag = 12;
+  string etag = 11;
   // Required: Time when the step run started.
-  google.protobuf.Timestamp started_at = 13;
+  google.protobuf.Timestamp started_at = 12;
   // Optional: Time when the step run finished; omitted while non-terminal.
-  google.protobuf.Timestamp finished_at = 14;
+  google.protobuf.Timestamp finished_at = 13;
   // Optional: Bounded human-readable step result summary.
-  string summary = 15;
+  string summary = 14;
   // Optional: Bounded structured step result details.
-  google.protobuf.Struct details = 16;
+  google.protobuf.Struct details = 15;
   // Optional: Approval challenge details when this is a Manual Approval step.
-  ApprovalChallenge approval_challenge = 17;
+  ApprovalChallenge approval_challenge = 16;
 }
 
 // ApprovalChallenge describes the current approval state for a step.
 message ApprovalChallenge {
-  // Required: Owning Account full stable ID.
-  string account_id = 1;
   // Required: Owning Pipeline full stable ID.
-  string pipeline_id = 2;
+  string pipeline_id = 1;
   // Required: Owning Target Group full stable ID.
-  string target_group_id = 3;
+  string target_group_id = 2;
   // Required for Deployment Runs and omitted for Promotion Runs: Owning Deployment Target full stable ID.
-  string target_id = 4;
+  string target_id = 3;
   // Required: Owning Promotion or Deployment Run full stable ID.
-  string parent_run_id = 5;
+  string parent_run_id = 4;
   // Required: Owning Step Run full stable ID.
-  string step_run_id = 6;
+  string step_run_id = 5;
   // Required: Approval Challenge full stable ID.
-  string challenge_id = 7;
+  string challenge_id = 6;
   // Required: Current challenge status.
-  ApprovalChallengeStatus status = 8;
+  ApprovalChallengeStatus status = 7;
 
   // Required: Principal identity.
-  temporal.api.cruisecontrol.principal.v1.Principal created_by = 9;
+  temporal.api.cruisecontrol.principal.v1.Principal created_by = 8;
   // Required: Positive number of approvals needed.
-  int32 required_approvals = 10;
+  int32 required_approvals = 9;
   // Required: Whether the run creator may approve the challenge.
-  bool allow_self_approval = 11;
+  bool allow_self_approval = 10;
   // Required: Time when the challenge was created.
-  google.protobuf.Timestamp created_at = 12;
+  google.protobuf.Timestamp created_at = 11;
   // Optional: Time when the challenge expires.
-  google.protobuf.Timestamp expires_at = 13;
+  google.protobuf.Timestamp expires_at = 12;
   // Optional: Time when the challenge reached a terminal state.
-  google.protobuf.Timestamp resolved_at = 14;
+  google.protobuf.Timestamp resolved_at = 13;
   // Required: Opaque etag used for decision preconditions; non-empty.
-  string etag = 15;
+  string etag = 14;
   // Required: Immutable decisions accepted for this challenge, in acceptance order.
-  repeated ApprovalDecisionRecord decisions = 16;
+  repeated ApprovalDecisionRecord decisions = 15;
 }
 
 // ApprovalDecisionRecord is one immutable response to an Approval Challenge.
