@@ -34,6 +34,18 @@ service WorkflowTemplateService {
       operation_id: "WorkflowTemplateService_UpdateWorkflowTemplate"
     };
   }
+  // buf:lint:ignore RPC_RESPONSE_STANDARD_NAME
+  rpc DeleteWorkflowTemplate(DeleteWorkflowTemplateRequest) returns (DeleteWorkflowTemplateAsyncResponse) {
+    option (google.api.http) = {
+      delete: "/v1/workflow-templates/{template_id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      tags: "WorkflowTemplateService"
+      summary: "Delete Workflow Template"
+      description: "Delete Workflow Template. Returns an asynchronous operation handle; poll AsyncOperationService.GetAsyncOperation for its terminal result."
+      operation_id: "WorkflowTemplateService_DeleteWorkflowTemplate"
+    };
+  }
   rpc GetWorkflowTemplate(GetWorkflowTemplateRequest) returns (GetWorkflowTemplateResponse) {
     option (google.api.http) = {
       get: "/v1/workflow-templates/{template_id}"

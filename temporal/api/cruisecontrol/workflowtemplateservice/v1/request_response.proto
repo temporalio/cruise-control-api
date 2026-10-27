@@ -38,6 +38,19 @@ message UpdateWorkflowTemplateResponse {
   temporal.api.cruisecontrol.workflow.v1.WorkflowTemplate workflow_template = 1;
 }
 
+message DeleteWorkflowTemplateRequest {
+  // Required: Workflow Template full stable ID to permanently delete. Example: `acct.acme:wt.standard`.
+  string template_id = 1;
+  // Required: Current Workflow Template etag; non-empty.
+  string prior_etag = 2;
+}
+
+message DeleteWorkflowTemplateAsyncResponse {
+  temporal.api.cruisecontrol.asyncoperationservice.v1.AsyncOperation async_operation = 1;
+}
+
+message DeleteWorkflowTemplateResponse {}
+
 message GetWorkflowTemplateRequest {
   // Required: Workflow Template full stable ID; scoped beneath account_id. Example: `acct.acme:wt.standard`.
   string template_id = 1;
