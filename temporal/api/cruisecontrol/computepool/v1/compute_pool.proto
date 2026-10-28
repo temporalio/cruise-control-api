@@ -14,6 +14,32 @@ message ComputePlatformProviderNexus {
   string nexus_service = 2;
 }
 
+// ComputePlatformConstraint is a named CEL rule governing provider configuration in an immutable pool revision.
+// Every rule must evaluate to true; false results, evaluation errors, and exceeded cost limits reject the configuration.
+message ComputePlatformConstraint {
+  // Required: Non-empty rule name, unique within the pool revision. Example: `namespace-locked`.
+  string name = 1;
+  // Required: CEL expression of at most 4096 bytes that compiles to a boolean result.
+  // Read-only map<string, dyn> inputs are `defaults` (pool revision settings),
+  // `overrides` (step provider_parameters, or an empty map), and `config` (the effective recursive merge).
+  // Objects merge recursively; scalars, arrays, and explicit nulls replace defaults. Array fields are not 
+  // merged into the resulting `config` object. The value of an array field in the `overrides` 
+  // object replaces the value of an array field in the `defaults` object.
+  //
+  // The pure helper `isOverridden(overrides, path)` uses JSON Pointer object paths to detect explicit writes
+  // to a field or its descendants and ancestor replacements, including identical writes; sibling writes are allowed.
+  // Escape `~` as `~0` and `/` as `~1`; wildcards and array-element addressing are unsupported.
+  // Example lock: `!isOverridden(overrides, '/namespace')`.
+  // Presence requirements are explicit: `!has(config.region) || config.region in ['us-east', 'us-west']` permits absence.
+  // Rules must also pass against defaults with empty overrides when publishing the revision.
+  //
+  // Evaluation is limited to 100,000 cost units per rule and 1,000,000 per configuration. Costs are defined following cel-go's
+  // cost model.
+  string expression = 2;
+  // Required: Non-empty static failure message reported with the rule name when the constraint rejects configuration.
+  string message = 3;
+}
+
 // ComputePoolSpec is the customer-managed provider configuration published in an immutable pool revision.
 message ComputePoolSpec {
   // Required: Display name.
@@ -28,6 +54,8 @@ message ComputePoolSpec {
   map<string, string> metadata = 5;
   // Required for custom providers; must be absent for built-ins.
   ComputePlatformProviderNexus compute_platform_provider_nexus = 6;
+  // Optional: Named boolean CEL predicates over defaults, overrides, and config.
+  repeated ComputePlatformConstraint compute_platform_constraints = 7;
 }
 
 // ComputePoolRevision is an immutable, account-scoped snapshot of a Compute Pool specification.
