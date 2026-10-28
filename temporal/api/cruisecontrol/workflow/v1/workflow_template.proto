@@ -19,12 +19,10 @@ message WorkflowTemplateSpec {
 
 // WorkflowTemplate is a reusable, account-scoped workflow definition.
 message WorkflowTemplate {
-  // Required: Owning Account full stable ID. Example: `acct.acme`.
-  string account_id = 1;
-  // Required: Workflow Template full stable ID; scoped beneath account_id. Example: `acct.acme:wt.standard`.
-  string template_id = 2;
+  // Required: Workflow Template full stable ID; scoped beneath the owning account. Example: `acct.acme:wt.standard`.
+  string template_id = 1;
   // Required: Customer-managed spec.
-  WorkflowTemplateSpec spec = 3;
+  WorkflowTemplateSpec spec = 2;
   // Required: Opaque etag used for write preconditions; non-empty.
-  string etag = 4;
+  string etag = 3;
 }

@@ -30,44 +30,42 @@ enum ProviderStatus {
 
 // DeployedVersion is a worker version deployed to one Deployment Target.
 message DeployedVersion {
-  // Required: Owning Account full stable ID.
-  string account_id = 1;
   // Required: Owning Pipeline full stable ID.
-  string pipeline_id = 2;
+  string pipeline_id = 1;
   // Required: Owning Target Group full stable ID.
-  string target_group_id = 3;
+  string target_group_id = 2;
   // Required: Owning Deployment Target full stable ID.
-  string target_id = 4;
+  string target_id = 3;
   // Required: Cruise Control-generated Deployed Version full stable ID.
-  string deployed_version_id = 5;
+  string deployed_version_id = 4;
   // Required: Artifact full stable ID represented by this version.
-  string artifact_id = 6;
+  string artifact_id = 5;
   // Required: Temporal Worker Deployment Build ID.
-  string worker_build_id = 7;
+  string worker_build_id = 6;
   // Required: Lifecycle state.
-  DeployedVersionState state = 8;
+  DeployedVersionState state = 7;
   // Optional: Traffic percentage; present only for RAMPING or CURRENT.
-  optional int32 ramping_percentage = 9;
+  optional int32 ramping_percentage = 8;
   // Required: Latest compute-provider observation.
-  ProviderStatus provider_status = 10;
+  ProviderStatus provider_status = 9;
   // Optional: Bounded opaque provider details.
-  google.protobuf.Struct provider_details = 11;
+  google.protobuf.Struct provider_details = 10;
   // Optional: Provider-owned identifier; never used as the Cruise Control ID.
-  string provider_deployed_version_id = 12;
+  string provider_deployed_version_id = 11;
   // Required: Time when the version was first recorded.
-  google.protobuf.Timestamp created_at = 13;
+  google.protobuf.Timestamp created_at = 12;
   // Required: Time of the latest accepted change.
-  google.protobuf.Timestamp updated_at = 14;
+  google.protobuf.Timestamp updated_at = 13;
   // Optional: Time when the version entered DELETED.
-  google.protobuf.Timestamp deleted_at = 15;
+  google.protobuf.Timestamp deleted_at = 14;
   // Optional: Time of the latest Worker Versioning drain observation.
-  google.protobuf.Timestamp last_drain_check_at = 16;
+  google.protobuf.Timestamp last_drain_check_at = 15;
   // Optional: Time of the latest compute-provider observation.
-  google.protobuf.Timestamp last_provider_checked_at = 17;
+  google.protobuf.Timestamp last_provider_checked_at = 16;
   // Required: Opaque etag used for write preconditions; non-empty.
-  string etag = 18;
+  string etag = 17;
   // Pool revision pinned when the deployment was accepted.
-  temporal.api.cruisecontrol.computepool.v1.ComputePoolRevisionReference compute_pool_revision = 19;
+  temporal.api.cruisecontrol.computepool.v1.ComputePoolRevisionReference compute_pool_revision = 18;
 }
 
 // DeployedVersionState identifies the lifecycle state of a deployed worker

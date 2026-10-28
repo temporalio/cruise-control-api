@@ -13,8 +13,10 @@ import "google/protobuf/timestamp.proto";
 option go_package = "go.temporal.io/api/cruise-control/pipelineservice/v1;pipelineservicev1";
 
 message CreatePipelineRequest {
-  // Required: Pipeline identity and customer-managed spec.
-  temporal.api.cruisecontrol.pipeline.v1.Pipeline pipeline = 1;
+  // Required: Pipeline full stable ID; a direct child of the caller account with a pipeline. segment. Example: `acct.acme:pipeline.checkout`.
+  string pipeline_id = 1;
+  // Required: Initial customer-managed specification.
+  temporal.api.cruisecontrol.pipeline.v1.PipelineSpec spec = 2;
 }
 
 message CreatePipelineAsyncResponse {
@@ -56,7 +58,7 @@ message DeletePipelineAsyncResponse {
 message DeletePipelineResponse {}
 
 message GetPipelineRequest {
-  // Required: Pipeline full stable ID; scoped beneath account_id. Example: `acct.acme:pipeline.checkout`.
+  // Required: Pipeline full stable ID; scoped beneath the owning account. Example: `acct.acme:pipeline.checkout`.
   string pipeline_id = 1;
 }
 
@@ -80,7 +82,7 @@ message ListPipelinesResponse {
 }
 
 message PublishArtifactRequest {
-  // Required: Owning Pipeline full stable ID; scoped beneath account_id. Example: `acct.acme:pipeline.checkout`.
+  // Required: Owning Pipeline full stable ID; scoped beneath the owning account. Example: `acct.acme:pipeline.checkout`.
   string pipeline_id = 1;
   // Required: Customer-provided immutable Artifact spec.
   temporal.api.cruisecontrol.artifact.v1.ArtifactSpec spec = 2;
@@ -440,9 +442,9 @@ message GetArtifactRolloutResponse {
   // Required: Requested immutable Artifact.
   temporal.api.cruisecontrol.artifact.v1.Artifact artifact = 1;
   // Per-group rollout state.
-  repeated temporal.api.cruisecontrol.artifact.v1.ArtifactGroupRollout group_statuses = 3;
+  repeated temporal.api.cruisecontrol.artifact.v1.ArtifactGroupRollout group_statuses = 2;
   // Per-target rollout state.
-  repeated temporal.api.cruisecontrol.artifact.v1.ArtifactTargetRollout target_statuses = 4;
+  repeated temporal.api.cruisecontrol.artifact.v1.ArtifactTargetRollout target_statuses = 3;
 }
 
 message ListDeployedVersionsRequest {
@@ -672,7 +674,7 @@ message ListDeploymentRunsRequest {
   string pipeline_id = 1;
   // Optional: Limits results to one Target Group.
   string target_group_id = 2;
-  // Optional: Limits results to one Deployment Target; target_group_id is required when set.
+  // Optional: Limits results to one Deployment Target; includes its owning Target Group.
   string target_id = 3;
   // Optional: Limits results to one Artifact.
   string artifact_id = 4;
