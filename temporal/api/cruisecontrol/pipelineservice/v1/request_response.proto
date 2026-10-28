@@ -128,8 +128,6 @@ message ListArtifactsResponse {
 message CreateTargetGroupRequest {
   // Required: Target Group identity and customer-managed spec.
   temporal.api.cruisecontrol.pipeline.v1.TargetGroup target_group = 1;
-  // Required: Current etag of the owning Pipeline; non-empty.
-  string prior_pipeline_etag = 2;
 }
 
 message CreateTargetGroupAsyncResponse {
@@ -441,8 +439,6 @@ message GetArtifactRolloutRequest {
 message GetArtifactRolloutResponse {
   // Required: Requested immutable Artifact.
   temporal.api.cruisecontrol.artifact.v1.Artifact artifact = 1;
-  // Required: Source Target Groups associated with the Artifact.
-  repeated string source_target_group_ids = 2;
   // Per-group rollout state.
   repeated temporal.api.cruisecontrol.artifact.v1.ArtifactGroupRollout group_statuses = 3;
   // Per-target rollout state.

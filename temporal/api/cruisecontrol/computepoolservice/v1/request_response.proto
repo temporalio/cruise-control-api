@@ -1,0 +1,142 @@
+syntax = "proto3";
+package temporal.api.cruisecontrol.computepoolservice.v1;
+
+import "temporal/api/cruisecontrol/asyncoperationservice/v1/async_operation.proto";
+import "temporal/api/cruisecontrol/computepool/v1/compute_pool.proto";
+
+option go_package = "go.temporal.io/api/cruise-control/computepoolservice/v1;computepoolservicev1";
+
+// CreateComputePoolRequest creates an account-scoped pool and publishes revision 1.
+message CreateComputePoolRequest {
+  // Required: Compute Pool full stable ID; a direct child of the caller account with a cpool. segment. Example: `acct.acme:cpool.production`.
+  string compute_pool_id = 1;
+  // Required: Initial customer-managed specification; provider configuration is validated before persistence.
+  temporal.api.cruisecontrol.computepool.v1.ComputePoolSpec spec = 2;
+}
+
+// CreateComputePoolResponse is the terminal result of a successful create operation.
+message CreateComputePoolResponse {
+  // Required: Created pool with its initial revision and etag, or an existing pool with a matching specification.
+  temporal.api.cruisecontrol.computepool.v1.ComputePool compute_pool = 1;
+}
+
+// CreateComputePoolAsyncResponse contains the operation handle for an asynchronous create.
+message CreateComputePoolAsyncResponse {
+  // Required: Asynchronous operation handle; poll AsyncOperationService.GetAsyncOperation for completion. A successful terminal response contains CreateComputePoolResponse.
+  temporal.api.cruisecontrol.asyncoperationservice.v1.AsyncOperation async_operation = 1;
+}
+
+// UpdateComputePoolRequest publishes the next revision on top of the current active pool head.
+// An unchanged specification with a matching prior_etag does not create a revision.
+message UpdateComputePoolRequest {
+  // Required: Compute Pool full stable ID; a direct child of the caller account with a cpool. segment. Example: `acct.acme:cpool.production`.
+  string compute_pool_id = 1;
+  // Required: Complete desired customer-managed specification; the existing revisions remain immutable.
+  temporal.api.cruisecontrol.computepool.v1.ComputePoolSpec spec = 2;
+  // Required: Current Compute Pool head etag; non-empty. Stale values conflict even when the requested state matches.
+  string prior_etag = 3;
+}
+
+// UpdateComputePoolResponse is the terminal result of a successful update operation.
+message UpdateComputePoolResponse {
+  // Required: Pool with its latest revision and resulting etag; unchanged content retains the current revision.
+  temporal.api.cruisecontrol.computepool.v1.ComputePool compute_pool = 1;
+}
+
+// UpdateComputePoolAsyncResponse contains the operation handle for an asynchronous update.
+message UpdateComputePoolAsyncResponse {
+  // Required: Asynchronous operation handle; poll AsyncOperationService.GetAsyncOperation for completion. A successful terminal response contains UpdateComputePoolResponse.
+  temporal.api.cruisecontrol.asyncoperationservice.v1.AsyncOperation async_operation = 1;
+}
+
+// ArchiveComputePoolRequest archives a pool while retaining its revisions and existing target references.
+message ArchiveComputePoolRequest {
+  // Required: Compute Pool full stable ID; a direct child of the caller account with a cpool. segment. Example: `acct.acme:cpool.production`.
+  string compute_pool_id = 1;
+  // Required: Current Compute Pool head etag; non-empty. Stale values conflict even when the requested state matches.
+  string prior_etag = 2;
+}
+
+// ArchiveComputePoolResponse is the terminal result of a successful archive operation.
+message ArchiveComputePoolResponse {
+  // Required: Archived pool with its resulting head etag; configuration revisions are retained.
+  temporal.api.cruisecontrol.computepool.v1.ComputePool compute_pool = 1;
+}
+
+// ArchiveComputePoolAsyncResponse contains the operation handle for an asynchronous archive.
+message ArchiveComputePoolAsyncResponse {
+  // Required: Asynchronous operation handle; poll AsyncOperationService.GetAsyncOperation for completion. A successful terminal response contains ArchiveComputePoolResponse.
+  temporal.api.cruisecontrol.asyncoperationservice.v1.AsyncOperation async_operation = 1;
+}
+
+// RestoreComputePoolRequest reactivates an archived pool without publishing a configuration revision.
+message RestoreComputePoolRequest {
+  // Required: Compute Pool full stable ID; a direct child of the caller account with a cpool. segment. Example: `acct.acme:cpool.production`.
+  string compute_pool_id = 1;
+  // Required: Current Compute Pool head etag; non-empty. Stale values conflict even when the requested state matches.
+  string prior_etag = 2;
+}
+
+// RestoreComputePoolResponse is the terminal result of a successful restore operation.
+message RestoreComputePoolResponse {
+  // Required: Active pool with its resulting head etag; the latest configuration revision is unchanged.
+  temporal.api.cruisecontrol.computepool.v1.ComputePool compute_pool = 1;
+}
+
+// RestoreComputePoolAsyncResponse contains the operation handle for an asynchronous restore.
+message RestoreComputePoolAsyncResponse {
+  // Required: Asynchronous operation handle; poll AsyncOperationService.GetAsyncOperation for completion. A successful terminal response contains RestoreComputePoolResponse.
+  temporal.api.cruisecontrol.asyncoperationservice.v1.AsyncOperation async_operation = 1;
+}
+
+// GetComputePoolRequest reads the current pool head and a selected immutable revision, including for archived pools.
+message GetComputePoolRequest {
+  // Required: Compute Pool full stable ID; a direct child of the caller account with a cpool. segment. Example: `acct.acme:cpool.production`.
+  string compute_pool_id = 1;
+  // Optional: Positive revision number; omission selects the latest revision. Zero and out-of-range values are invalid.
+  optional uint64 revision = 2;
+}
+
+// GetComputePoolResponse includes the current pool head and the requested revision, which may be historical.
+message GetComputePoolResponse {
+  // Required: Current pool head and lifecycle state, even when a historical revision was requested.
+  temporal.api.cruisecontrol.computepool.v1.ComputePool compute_pool = 1;
+  // Required: Requested immutable revision, or the latest revision when revision was omitted.
+  temporal.api.cruisecontrol.computepool.v1.ComputePoolRevision compute_pool_revision = 2;
+}
+
+// ListComputePoolsRequest lists pools in the caller account, excluding archived pools by default.
+message ListComputePoolsRequest {
+  // Optional: Include archived pools; defaults to false.
+  bool include_archived = 1;
+  // Optional: Page size; 0 uses the server default, negative values are invalid, and positive values may be capped.
+  int32 page_size = 2;
+  // Optional: Opaque continuation token; must come from this operation with identical filters.
+  string page_token = 3;
+}
+
+// ListComputePoolsResponse contains one page of account-scoped pools.
+message ListComputePoolsResponse {
+  // Required: Compute Pools in stable creation order; may be empty.
+  repeated temporal.api.cruisecontrol.computepool.v1.ComputePool compute_pools = 1;
+  // Optional: Continuation token; omitted when no further page exists.
+  string next_page_token = 2;
+}
+
+// ListComputePoolRevisionsRequest lists immutable revisions of a pool, including an archived pool.
+message ListComputePoolRevisionsRequest {
+  // Required: Compute Pool full stable ID; a direct child of the caller account with a cpool. segment. Example: `acct.acme:cpool.production`.
+  string compute_pool_id = 1;
+  // Optional: Page size; 0 uses the server default, negative values are invalid, and positive values may be capped.
+  int32 page_size = 2;
+  // Optional: Opaque continuation token; must come from this operation with identical filters.
+  string page_token = 3;
+}
+
+// ListComputePoolRevisionsResponse contains one page of revision history, newest first.
+message ListComputePoolRevisionsResponse {
+  // Required: Immutable revisions ordered by descending revision number; may be empty.
+  repeated temporal.api.cruisecontrol.computepool.v1.ComputePoolRevision compute_pool_revisions = 1;
+  // Optional: Continuation token; omitted when no further page exists.
+  string next_page_token = 2;
+}

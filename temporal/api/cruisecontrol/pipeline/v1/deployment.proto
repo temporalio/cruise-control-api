@@ -3,6 +3,7 @@ package temporal.api.cruisecontrol.pipeline.v1;
 
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
+import "temporal/api/cruisecontrol/computepool/v1/compute_pool.proto";
 
 option go_package = "go.temporal.io/api/cruise-control/pipeline/v1;pipelinev1";
 
@@ -65,6 +66,8 @@ message DeployedVersion {
   google.protobuf.Timestamp last_provider_checked_at = 17;
   // Required: Opaque etag used for write preconditions; non-empty.
   string etag = 18;
+  // Pool revision pinned when the deployment was accepted.
+  temporal.api.cruisecontrol.computepool.v1.ComputePoolRevisionReference compute_pool_revision = 19;
 }
 
 // DeployedVersionState identifies the lifecycle state of a deployed worker

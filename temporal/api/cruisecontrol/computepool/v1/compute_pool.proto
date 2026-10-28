@@ -1,0 +1,68 @@
+syntax = "proto3";
+package temporal.api.cruisecontrol.computepool.v1;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "go.temporal.io/api/cruise-control/computepool/v1;computepoolv1";
+
+// ComputePlatformProviderNexus identifies the customer-owned Nexus service for a custom compute platform provider.
+message ComputePlatformProviderNexus {
+  // Required: Customer-configured Temporal Nexus endpoint name.
+  string nexus_endpoint = 1;
+  // Required: Customer-owned Nexus service name.
+  string nexus_service = 2;
+}
+
+// ComputePoolSpec is the customer-managed provider configuration published in an immutable pool revision.
+message ComputePoolSpec {
+  // Required: Display name.
+  string name = 1;
+  // Optional: Description.
+  string description = 2;
+  // Required: Configured built-in provider name or `custom`.
+  string compute_platform = 3;
+  // Optional: Provider configuration; validated by the selected provider.
+  google.protobuf.Struct compute_platform_details = 4;
+  // Optional: Metadata; keys are 1-100 characters matching [A-Za-z0-9_.-]+.
+  map<string, string> metadata = 5;
+  // Required for custom providers; must be absent for built-ins.
+  ComputePlatformProviderNexus compute_platform_provider_nexus = 6;
+}
+
+// ComputePoolRevision is an immutable, account-scoped snapshot of a Compute Pool specification.
+message ComputePoolRevision {
+  // Required: Compute Pool full stable ID; a direct child of the owning account with a cpool. segment. Example: `acct.acme:cpool.production`.
+  string compute_pool_id = 1;
+  // Required: Server-assigned revision number; starts at 1 and increases sequentially for specification changes.
+  uint64 revision = 2;
+  // Required: Immutable customer-managed specification for this revision.
+  ComputePoolSpec spec = 3;
+  // Required: Time when this revision was published.
+  google.protobuf.Timestamp created_at = 4;
+}
+
+// ComputePool is an account-scoped provider configuration with a latest revision and archive state.
+// Deployment Targets reference its ID; accepted deployments pin the latest active revision.
+message ComputePool {
+  // Required: Compute Pool full stable ID; a direct child of the owning account with a cpool. segment. Example: `acct.acme:cpool.production`.
+  string compute_pool_id = 1;
+  // Required: Latest published configuration revision; archive and restore do not create revisions.
+  ComputePoolRevision latest_revision = 2;
+  // Required: Whether the pool is archived. Archived pools reject configuration updates, new target references, and new deployments; already pinned runs and version cleanup may continue.
+  bool archived = 3;
+  // Required: Opaque head etag used for update, archive, and restore preconditions; non-empty and advanced by accepted configuration or lifecycle changes.
+  string etag = 4;
+  // Required: Time when the Compute Pool was created.
+  google.protobuf.Timestamp created_at = 5;
+  // Required: Time of the latest accepted configuration or archive-state change.
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+// ComputePoolRevisionReference identifies the immutable pool revision pinned by a Deployment Run or Deployed Version.
+message ComputePoolRevisionReference {
+  // Required: Compute Pool full stable ID; a direct child of the owning account with a cpool. segment. Example: `acct.acme:cpool.production`.
+  string compute_pool_id = 1;
+  // Required: Positive revision number selected when the deployment was accepted; later pool changes do not alter this association.
+  uint64 revision = 2;
+}
