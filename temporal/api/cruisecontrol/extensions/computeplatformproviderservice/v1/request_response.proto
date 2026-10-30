@@ -25,12 +25,10 @@ message CreateDeployedVersionRequest {
   string temporal_namespace = 6;
   // Required: Temporal Worker Deployment name.
   string worker_deployment_name = 7;
-  // Optional: target compute-platform configuration.
+  // Optional: Effective merged provider configuration, validated centrally.
   google.protobuf.Struct platform_details = 8;
-  // Optional: step-specific provider parameters.
-  google.protobuf.Struct provider_parameters = 9;
   // Optional: snapshotted target environment variables.
-  map<string, ProviderEnvironmentVariable> environment_variables = 10;
+  map<string, ProviderEnvironmentVariable> environment_variables = 9;
 }
 
 // CreateDeployedVersionResponse reports provider-owned identity and initial
@@ -56,7 +54,7 @@ message DescribeDeployedVersionRequest {
   string deployed_version_id = 4;
   // Optional: provider-owned version identifier returned by create.
   string provider_deployed_version_id = 5;
-  // Optional: target compute-platform configuration.
+  // Optional: Effective merged provider configuration, validated centrally.
   google.protobuf.Struct platform_details = 6;
 }
 
@@ -81,7 +79,7 @@ message DeleteDeployedVersionRequest {
   string deployed_version_id = 4;
   // Optional: provider-owned version identifier returned by create.
   string provider_deployed_version_id = 5;
-  // Optional: target compute-platform configuration.
+  // Optional: Effective merged provider configuration, validated centrally.
   google.protobuf.Struct platform_details = 6;
 }
 
@@ -106,10 +104,8 @@ message RunTaskRequest {
   repeated string args = 7;
   // Optional: merged target and step environment variables.
   map<string, ProviderEnvironmentVariable> environment_variables = 8;
-  // Optional: target compute-platform configuration.
+  // Optional: Effective merged provider configuration, validated centrally.
   google.protobuf.Struct platform_details = 9;
-  // Optional: step-specific provider parameters.
-  google.protobuf.Struct provider_parameters = 10;
 }
 
 // RunTaskResponse reports one terminal task execution.
