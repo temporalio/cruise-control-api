@@ -89,7 +89,8 @@ message DeploymentTargetSpec {
   string name = 1;
   // Optional: Labels; keys are 1-100 characters matching [A-Za-z0-9_.-]+.
   map<string, string> labels = 2;
-  // Required: Temporal worker configuration.
+  // Optional: Enables Temporal worker versioning management when present.
+  // Both namespace and worker_deployment_name are required when provided.
   TemporalConfiguration temporal_configuration = 3;
   // Required: Account-scoped Compute Pool ID. Example: `acct.acme:cpool.production`.
   string compute_pool_id = 4;
